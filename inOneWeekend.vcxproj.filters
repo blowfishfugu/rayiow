@@ -29,5 +29,8 @@
     <ClInclude Include="src\ppm_ascii.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\ray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

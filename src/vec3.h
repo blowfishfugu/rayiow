@@ -13,6 +13,7 @@
 template<std::floating_point F>
 struct vec3
 {
+	using value_type = F;
 	std::array<F,3> e;
 	constexpr vec3( F e0, F e1, F e2 ): e{e0,e1,e2}
 	{}
@@ -103,7 +104,13 @@ inline vec3<T> operator*(const vec3<T>& l, const vec3<T>& r)
 template<std::floating_point T>
 inline vec3<T> operator*(const vec3<T>& v, T t)
 {
-	return t * v;
+	return vec3<T>{t, t, t} *v;
+}
+
+template<std::floating_point T>
+inline vec3<T> operator*( T t, const vec3<T>& v)
+{
+	return vec3<T>{t, t, t} *v;
 }
 
 template<std::floating_point T>
