@@ -4,6 +4,8 @@
 #include <array>
 #include <string_view>
 
+#include "vec3.h"
+
 struct ppm_ascii_pixel {
 	int32_t r{};
 	int32_t g{};
@@ -56,5 +58,6 @@ int main(int argc, char** argv)
 			std::cout << pxl;
 		}
 	}
+
 	return 0;
 }
