@@ -79,10 +79,10 @@ struct camera
 point3::value_type hit_sphere(const point3& center, point3::value_type radius, const ray& r)
 {
 	vec3 oc = r.origin() - center;
-	point3::value_type a = dot(r.direction(), r.direction());
-	point3::value_type b = 2.0 * dot(oc, r.direction());
-	point3::value_type c = dot(oc, oc) - radius * radius;
-	point3::value_type discriminant = b * b - 4 * a * c;
+	point3::value_type a = r.direction().length_squared();
+	point3::value_type half_b = dot(oc, r.direction());
+	point3::value_type c = oc.length_squared() - radius * radius;
+	point3::value_type discriminant = half_b * half_b - a*c;
 	//(-b +/- sqrt(b+*b-4ac) ) / (2a)
 	//return discriminant >= 0;
 	if (discriminant < 0)
@@ -91,7 +91,7 @@ point3::value_type hit_sphere(const point3& center, point3::value_type radius, c
 	}
 	else
 	{
-		return (-b - sqrt(discriminant)) / (2.0 * a);
+		return (-half_b - sqrt(discriminant)) / a;
 	}
 }
 
@@ -112,9 +112,9 @@ color ray_color(const ray& r)
 int main(int argc, char** argv)
 {
 	printSampleRay();
+	//TODO: 6.3 An Abstraction for Hittable Objects
 
-
-	canvas img{ 19.0,6.0,400 };
+	canvas img{ 16.0,9.0,400 };
 	viewport view{ 2.0,img };
 	camera cam{ img,view };
 
