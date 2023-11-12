@@ -76,7 +76,7 @@ struct camera
 	}
 };
 
-bool hit_sphere(const point3& center, point3::value_type radius, const ray& r)
+point3::value_type hit_sphere(const point3& center, point3::value_type radius, const ray& r)
 {
 	vec3 oc = r.origin() - center;
 	point3::value_type a = dot(r.direction(), r.direction());
@@ -84,14 +84,25 @@ bool hit_sphere(const point3& center, point3::value_type radius, const ray& r)
 	point3::value_type c = dot(oc, oc) - radius * radius;
 	point3::value_type discriminant = b * b - 4 * a * c;
 	//(-b +/- sqrt(b+*b-4ac) ) / (2a)
-	return discriminant >= 0;
+	//return discriminant >= 0;
+	if (discriminant < 0)
+	{
+		return -1.0;
+	}
+	else
+	{
+		return (-b - sqrt(discriminant)) / (2.0 * a);
+	}
 }
 
 color ray_color(const ray& r)
 {
-	if (hit_sphere(point3{ 0,0,-1 }, 0.5, r)) //sphere on center -1z
+	point3 sphere_center{ 0,0,-1 };
+	auto t = hit_sphere(sphere_center, 0.5, r); //sphere on center -1z
+	if( t> 0.0 )
 	{
-		return color{ 1,0,0 };
+		vec3 N = unit_vector(r.at(t) - sphere_center);
+		return 0.5*color{ N.x()+1.0,N.y()+1.0,N.z()+1.0 };
 	}
 	vec3<point3::value_type> unit_direction = unit_vector(r.direction());
 	point3::value_type y = 0.5 * (unit_direction.y() + 1.0); // -1.0 <= y <= 1.0
