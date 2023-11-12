@@ -76,8 +76,23 @@ struct camera
 	}
 };
 
+bool hit_sphere(const point3& center, point3::value_type radius, const ray& r)
+{
+	vec3 oc = r.origin() - center;
+	point3::value_type a = dot(r.direction(), r.direction());
+	point3::value_type b = 2.0 * dot(oc, r.direction());
+	point3::value_type c = dot(oc, oc) - radius * radius;
+	point3::value_type discriminant = b * b - 4 * a * c;
+	//(-b +/- sqrt(b+*b-4ac) ) / (2a)
+	return discriminant >= 0;
+}
+
 color ray_color(const ray& r)
 {
+	if (hit_sphere(point3{ 0,0,-1 }, 0.5, r)) //sphere on center -1z
+	{
+		return color{ 1,0,0 };
+	}
 	vec3<point3::value_type> unit_direction = unit_vector(r.direction());
 	point3::value_type y = 0.5 * (unit_direction.y() + 1.0); // -1.0 <= y <= 1.0
 	return (1.0 - y) * color { 1.0, 1.0, 1.0 } + y * color{ 0.5,0.7,1.0 }; //lerp color1 to color2
