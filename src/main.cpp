@@ -71,8 +71,7 @@ struct camera
 	explicit camera( const canvas& Canvas, const viewport& Viewport)
 		: _canvas{ Canvas }, _viewport{ Viewport }
 	{
-		upper_left=camera_center-point3(0,0,focal_length)
-		- _viewport.U / 2.0 - _viewport.V / 2.0;
+		upper_left=camera_center-point3(0,0,focal_length) - _viewport.U / 2.0 - _viewport.V / 2.0;
 		pixel00 = upper_left + 0.5 * (_viewport.pixel_delta_U + _viewport.pixel_delta_V);
 	}
 };
@@ -80,10 +79,8 @@ struct camera
 color ray_color(const ray& r)
 {
 	vec3<point3::value_type> unit_direction = unit_vector(r.direction());
-	point3::value_type a = 0.5 * (unit_direction.y() + 1.0);
-	return 
-		(1.0 - a) * color { 1.0, 1.0, 1.0 }
-		+ a * color{ 0.5,0.7,1.0 };
+	point3::value_type y = 0.5 * (unit_direction.y() + 1.0); // -1.0 <= y <= 1.0
+	return (1.0 - y) * color { 1.0, 1.0, 1.0 } + y * color{ 0.5,0.7,1.0 }; //lerp color1 to color2
 }
 
 int main(int argc, char** argv)
